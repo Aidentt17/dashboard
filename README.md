@@ -1,6 +1,8 @@
 # Data-science-project
 ##############################################
+
 dash board operations
+
 ##############################################
 
 computer installations
@@ -65,7 +67,9 @@ go to visual studio codes terminal press: ctrl + c
 ![alt text](image-5.png)
 
 ##############################################
+
 data prerperation
+
 ##############################################
 
 - this section is about how to get the excel data into a ready format for our dashboard
@@ -89,7 +93,9 @@ steps to update data
 
 
 ##############################################
+
 Stream lit cloud operation (we have done this)
+
 ##############################################
 
 STREAMLIT: (need to make an account/ choose the continue with github option)
