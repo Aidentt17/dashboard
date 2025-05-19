@@ -14,9 +14,6 @@ GITHUB: (need to make an account)
 https://github.com/
 - i will need to invite you to our repository (need username for invite)
 
-STREAMLIT: (need to make an account/ simply link it to ur github account)
-https://authkit.streamlit.io/?client_id=project_01EZ8RPVCZQ40ZGBV6Y87N8V8V&redirect_uri=https%3A%2F%2Flogin.streamlit.io%2Fapi%2Fv1%2Flogin%2Fshare%2Fcallback&response_type=code&state=ZeCp1M6p53PseK1vW35J7EZ55cDDMqAcx4K7GsWt170qAvTlswnvhOZ1kZCi-jCaYhrUUU9Jb5aiUVfA7B1JbSvh7fKVrvqCqx-D4Dy49uprhJHHn1ZctyAlRLJnauqs9mpH6BGGSSmtsBYOLHhf-j0us1XjmZpuYBXtBovmRC1h6GJt0JUln78LczuBYV-MQU_a_W9bjri7GvxyRM0aSHvBBc6Oa0_gEWvTNHzR08m9Ek7_dwpPDoUr0L6XuXKDs85I5m7WTqCSs8lW_3D0kUcIPxpN8X2Kr7c41G_OPOVpJDob6UNi0a6jbA1whjg6DJyPiG0JLWk-rcplszW88LVVI3n_a5zbdVYNYJa6Fs3AhigYGSKaQccvzN7pGy55X3Nl2MZJ71X524zeEmJZWXuJGfV8KEMY37-GtKtebw9aoExwRwHnPBex1oxIRE6vVg5GslTVDbJNsJIu3rwoX7JSoLtz-g4WV2-3TU6_&authorization_session_id=01JVGNGGXQ993FW0YQNP5SGZKW
-
 
 Visual studio code extensions:
 to run python we will need these(they should come together under "python")
@@ -35,7 +32,7 @@ https://www.youtube.com/watch?v=i_23KUAEtUM&t=300s&ab_channel=VisualStudioCode
 
 
 code operation:
-- neccersay installments (copy and paste into terminal, then restart computer)
+- neccersay installments (copy and paste into terminal 1 at a time, then restart computer)
 pip install streamlit
 pip install pandas
 pip install altair
@@ -94,6 +91,9 @@ steps to update data
 ##############################################
 Stream lit cloud operation (we have done this)
 ##############################################
+
+STREAMLIT: (need to make an account/ choose the continue with github option)
+https://authkit.streamlit.io/?client_id=project_01EZ8RPVCZQ40ZGBV6Y87N8V8V&redirect_uri=https%3A%2F%2Flogin.streamlit.io%2Fapi%2Fv1%2Flogin%2Fshare%2Fcallback&response_type=code&state=ZeCp1M6p53PseK1vW35J7EZ55cDDMqAcx4K7GsWt170qAvTlswnvhOZ1kZCi-jCaYhrUUU9Jb5aiUVfA7B1JbSvh7fKVrvqCqx-D4Dy49uprhJHHn1ZctyAlRLJnauqs9mpH6BGGSSmtsBYOLHhf-j0us1XjmZpuYBXtBovmRC1h6GJt0JUln78LczuBYV-MQU_a_W9bjri7GvxyRM0aSHvBBc6Oa0_gEWvTNHzR08m9Ek7_dwpPDoUr0L6XuXKDs85I5m7WTqCSs8lW_3D0kUcIPxpN8X2Kr7c41G_OPOVpJDob6UNi0a6jbA1whjg6DJyPiG0JLWk-rcplszW88LVVI3n_a5zbdVYNYJa6Fs3AhigYGSKaQccvzN7pGy55X3Nl2MZJ71X524zeEmJZWXuJGfV8KEMY37-GtKtebw9aoExwRwHnPBex1oxIRE6vVg5GslTVDbJNsJIu3rwoX7JSoLtz-g4WV2-3TU6_&authorization_session_id=01JVGNGGXQ993FW0YQNP5SGZKW
 
 - to turn the dashboard into a web-link
 - 1,sign into Streamlit Community Cloud (free version) using your GitHub account (press authorise) 
