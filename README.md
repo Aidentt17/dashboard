@@ -72,3 +72,7 @@ go to visual studio codes terminal press: ctrl + c
 5,adjust the main file path to 'dashboard.py', and set the App URL
 6,Press deploy and now it is transformed into a web-based link
 
+link:
+
+
+
