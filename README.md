@@ -11,7 +11,7 @@ https://git-scm.com/
 GITHUB: (need to make an account)
 https://github.com/
 
-STRREAMLIT: (need to make an account)
+STREAMLIT: (need to make an account)
 https://authkit.streamlit.io/?client_id=project_01EZ8RPVCZQ40ZGBV6Y87N8V8V&redirect_uri=https%3A%2F%2Flogin.streamlit.io%2Fapi%2Fv1%2Flogin%2Fshare%2Fcallback&response_type=code&state=ZeCp1M6p53PseK1vW35J7EZ55cDDMqAcx4K7GsWt170qAvTlswnvhOZ1kZCi-jCaYhrUUU9Jb5aiUVfA7B1JbSvh7fKVrvqCqx-D4Dy49uprhJHHn1ZctyAlRLJnauqs9mpH6BGGSSmtsBYOLHhf-j0us1XjmZpuYBXtBovmRC1h6GJt0JUln78LczuBYV-MQU_a_W9bjri7GvxyRM0aSHvBBc6Oa0_gEWvTNHzR08m9Ek7_dwpPDoUr0L6XuXKDs85I5m7WTqCSs8lW_3D0kUcIPxpN8X2Kr7c41G_OPOVpJDob6UNi0a6jbA1whjg6DJyPiG0JLWk-rcplszW88LVVI3n_a5zbdVYNYJa6Fs3AhigYGSKaQccvzN7pGy55X3Nl2MZJ71X524zeEmJZWXuJGfV8KEMY37-GtKtebw9aoExwRwHnPBex1oxIRE6vVg5GslTVDbJNsJIu3rwoX7JSoLtz-g4WV2-3TU6_&authorization_session_id=01JVGNGGXQ993FW0YQNP5SGZKW
 
 
@@ -65,7 +65,7 @@ go to visual studio codes terminal press: ctrl + c
 ![alt text](image-5.png)
 
 - to turn the dashboard into a web-link
-- 1,sign into Streamlit Community Cloud (free version) using your GitHub account (press authorise) https://authkit.streamlit.io/?client_id=project_01EZ8RPVCZQ40ZGBV6Y87N8V8V&redirect_uri=https%3A%2F%2Flogin.streamlit.io%2Fapi%2Fv1%2Flogin%2Fshare%2Fcallback&response_type=code&state=rwhBKDlYb284_7_0GPk1Nr0YbYePn1HSOCL11a7cSNHm3JXRFL3vaXub1j-r9q1qIDWN-eaphn1jlEPazkCuqEPVHvw_f0U0z-RIj2Zc77ui15Jwah11-o-8ndn2hQkabZjr3zjw81tmMWk_ZgaqdyDuSuwwcvBMlYVRaGE_EAb6WPjVfw1R_0_3MdtXCdKTno35gKzj4qSPpusc5pQUTiz5Db8YWBi5XJB_OEbpf0c6qbSK745Eo_SdP3rrmvsTV-qdrIpTLZp8j_OTxBqk3HND8WqhXmVNsdoBdpBrRemFlDqcQ4wrYUN6_KHO44NPaf75QErDl_OEqELFjRLS97OMseLg5nWkPAL0veu1PDDMiuWyV-Ga948WlPwgwb_S_aIbdg1oTN2ufOERtf1SgkaWQJksVJKctOkFQO1IAYpO3d__PJM7uyaoiwta39XA0q7OhyfINJ7nHhwFIjRxW85J6Aj2rfe9_L5Iux5N&authorization_session_id=01JVK0WRGJBDRSW5AHNY8HDX05
+- 1,sign into Streamlit Community Cloud (free version) using your GitHub account (press authorise) 
 - 2,press the 'Create app' button in the top right hand corner
 - 3,select 'Deploy a public app from GitHub', then 'Deploy now'
 - 4,paste the GitHub url into respository (this is the URL link on the home-page of the repository - ensure that it is on public)
