@@ -73,6 +73,7 @@ go to visual studio codes terminal press: ctrl + c
 - 6,Press deploy and now it is transformed into a web-based link
 
 link:
+https://dashboard-basketballvictoria.streamlit.app/
 
 
 
