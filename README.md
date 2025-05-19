@@ -65,10 +65,10 @@ go to visual studio codes terminal press: ctrl + c
 ![alt text](image-5.png)
 
 - to turn the dashboard into a web-link
-1,sign into Streamlit Community Cloud (free version) using your GitHub account (press authorise)
-2,press the 'Create app' button in the top right hand corner
-3,select 'Deploy a public app from GitHub', then 'Deploy now'
-4,paste the GitHub url into respository (this is the URL link on the home-page of the repository - ensure that it is on public)
-5,adjust the main file path to 'dashboard.py', and set the App URL
-6,Press deploy and now it is transformed into a web-based link
+- 1,sign into Streamlit Community Cloud (free version) using your GitHub account (press authorise)
+- 2,press the 'Create app' button in the top right hand corner
+- 3,select 'Deploy a public app from GitHub', then 'Deploy now'
+- 4,paste the GitHub url into respository (this is the URL link on the home-page of the repository - ensure that it is on public)
+- 5,adjust the main file path to 'dashboard.py', and set the App URL
+- 6,Press deploy and now it is transformed into a web-based link
 
