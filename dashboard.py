@@ -124,50 +124,62 @@ if st.session_state.show_legend:
 ##################################################################
 
 ################# Load dataset #################
-df = pd.read_excel("all.xlsx", engine="openpyxl")
-# Remove whitespace if any
-df.columns = df.columns.str.strip()
 
-################## UI for type of data ##################
+available_datasets = [
+    "df.csv",
+    "dfavgcareer.csv",
+    "dfavgsbs.csv",
+    "dfscaledavgcareer.csv",
+    "dfscaledavgsbs.csv",
+    "dfscaledthirtyavgcareer.csv",
+    "dfscaledthirtyavgsbs.csv",
+    "dftotalscareer.csv"
+]
 
-# options for the different scaleing
-scale_options = ["Raw", "Scaled (Per Minute)", "Scaled (to 40 Minutes)"]
-selected_scale = st.sidebar.selectbox("Select Stats View", scale_options)
+selected_dataset = st.sidebar.selectbox("Choose a Dataset", available_datasets)
 
-# Map to column prefixes
-if selected_scale == "Raw":
-    prefix = ""
-elif selected_scale == "Scaled (Per Minute)":
-    prefix = "scaled"
-elif selected_scale == "Scaled (to 40 Minutes)":
-    prefix = "adjusted"
+try:
+    df = pd.read_csv(selected_dataset)
+    df.columns = df.columns.str.strip()
+except Exception as e:
+    st.error(f"Failed to load dataset: {e}")
+    st.stop()
 
-# Display mode state
-if "display_mode" not in st.session_state:
-    st.session_state.display_mode = "averages"
-
-#markdown display for each user choice
-st.sidebar.markdown("### **Display Options**")
-if st.sidebar.button("Show Averages"):
-    st.session_state.display_mode = "averages"
-if st.sidebar.button("Show Season-by-Season"):
-    st.session_state.display_mode = "season"
-if st.sidebar.button("Show Totals"):
-    st.session_state.display_mode = "totals"
 
 ############################ Filters ############################
 
 # UI separator
 st.sidebar.markdown("### **_________ Filter Options ___________**")
 
-# Add full_name column
-if "First Name" in df.columns and "Family Name" in df.columns:
-    df["full_name"] = df["First Name"] + " " + df["Family Name"]
+# Standardize to full_name column for filtering and display
+if "full_name" not in df.columns:
+    if "Name" in df.columns:
+        df["full_name"] = df["Name"].astype(str).str.strip()
+    elif "First Name" in df.columns and "Family Name" in df.columns:
+        df["full_name"] = (
+            df["First Name"].astype(str).str.strip() + " " +
+            df["Family Name"].astype(str).str.strip()
+        )
+    else:
+        st.warning("No suitable player name columns found in this dataset.")
+        df["full_name"] = ""  # fallback to prevent errors
 
 # Player search
 search_term = st.sidebar.text_input("Search Player Name")
 if search_term:
-    df = df[df["full_name"].str.contains(search_term, case=False, na=False)]
+    matches = df["full_name"].astype(str).str.contains(search_term.strip(), case=False, na=False)
+    if matches.any():
+        df = df[matches]
+    else:
+        st.warning(f"No matches found for: '{search_term}'")
+
+
+# Only apply search if a valid name column exists
+if search_term:
+    if "full_name" in df.columns:
+        df = df[df["full_name"].astype(str).str.contains(search_term, case=False, na=False)]
+    else:
+        st.warning("No 'full_name' column found. Player name search is not available for this dataset.")
 
 # Club filter
 if "Club Name" in df.columns:
@@ -237,58 +249,20 @@ if highlight_mode == "Yes":
         return [''] * len(row)
 
 ############################ Display/ math ############################
-#coloumns to keep
+
 info_columns = [
-    "First Name", "Family Name", "Club Name", "Competition Name",
+    "full_name", "First Name", "Family Name", "Club Name", "Competition Name",
     "Equivalent Competition", "Level", "Gender", "Season", "GP"
 ]
-#coloumns to do compututations
-stat_suffixes = [
-    "MIN", "PTS", "DR", "OR", "REB", "AST", "STL", "BLK", "BLKON",
-    "FOUL", "FOULON", "TO", "FGM", "FGA", "2PM", "2PA", "3PM", "3PA", "FTM", "FTA"
-]
-selected_columns = [f"{prefix}{s}" if prefix else s for s in stat_suffixes]
-existing_selected_columns = [col for col in selected_columns if col in df.columns]
-missing_columns = [col for col in selected_columns if col not in df.columns]
+stat_columns = [col for col in df.columns if col not in info_columns]
+final_columns = [col for col in info_columns + stat_columns if col in df.columns]
 
-if missing_columns:
-    st.warning(f"Missing columns for this scale: {missing_columns}")
+st.write(f"### Displaying: {selected_dataset}")
 
-if len(existing_selected_columns) == 0:
-    st.warning("No matching stat columns found to display.")
+if highlight_mode == "Yes":
+    st.dataframe(df[final_columns].style.apply(highlight_filtered_rows, axis=1))
 else:
-    if st.session_state.display_mode == "averages":
-        avg_stats = df.groupby("full_name")[existing_selected_columns].mean()
-        first_info = df.groupby("full_name")[info_columns].first()
-        result = avg_stats.join(first_info).reset_index()
-        final_columns = ["full_name"] + info_columns + existing_selected_columns
-
-        st.write(f"### Player Averaged Stats ({selected_scale})")
-        if highlight_mode == "Yes":
-            st.dataframe(result[final_columns].style.apply(highlight_filtered_rows, axis=1))
-        else:
-            st.dataframe(result[final_columns])
-
-    elif st.session_state.display_mode == "totals":
-        total_stats = df.groupby("full_name")[existing_selected_columns].sum()
-        first_info = df.groupby("full_name")[info_columns].first()
-        result = total_stats.join(first_info).reset_index()
-        final_columns = ["full_name"] + info_columns + existing_selected_columns
-
-        st.write(f"### Player Total Stats ({selected_scale})")
-        if highlight_mode == "Yes":
-            st.dataframe(result[final_columns].style.apply(highlight_filtered_rows, axis=1))
-        else:
-            st.dataframe(result[final_columns])
-
-    else:  # season-by-season
-        display_columns = info_columns + existing_selected_columns
-        st.write(f"### Player Season Stats ({selected_scale})")
-        if highlight_mode == "Yes":
-            st.dataframe(df[display_columns].style.apply(highlight_filtered_rows, axis=1))
-        else:
-            st.dataframe(df[display_columns])
-
+    st.dataframe(df[final_columns])
 
 #        
 # U/I
