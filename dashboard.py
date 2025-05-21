@@ -135,8 +135,22 @@ available_datasets = [
     "dfscaledthirtyavgsbs.csv",
     "dftotalscareer.csv"
 ]
+dataset_name_map = {
+    "df.csv": "Raw Data",
+    "dfavgcareer.csv": "Average Career Stats",
+    "dfavgsbs.csv": "Average Season by Season Stats",
+    "dfscaledavgcareer.csv": "Scaled Avg Career Stats",
+    "dfscaledavgsbs.csv": "Scaled Avg Season by season Stats",
+    "dfscaledthirtyavgcareer.csv": "Scaled 30-Game Avg Career Stats",
+    "dfscaledthirtyavgsbs.csv": "Scaled 30-Game Avg Season by Season Stats",
+    "dftotalscareer.csv": "Total Career Stats"
+}
 
-selected_dataset = st.sidebar.selectbox("Choose a Dataset", available_datasets)
+readable_to_filename = {v: k for k, v in dataset_name_map.items()}
+
+readable_names = list(readable_to_filename.keys())
+selected_readable_name = st.sidebar.selectbox("Choose a Dataset", readable_names)
+selected_dataset = readable_to_filename[selected_readable_name]
 
 try:
     df = pd.read_csv(selected_dataset)
@@ -258,7 +272,8 @@ info_columns = [
 stat_columns = [col for col in df.columns if col not in info_columns]
 final_columns = [col for col in info_columns + stat_columns if col in df.columns]
 
-st.write(f"### Displaying: {selected_dataset}")
+readable_name = dataset_name_map.get(selected_dataset, selected_dataset)
+st.write(f"### Displaying: {readable_name}")
 
 if highlight_mode == "Yes":
     st.dataframe(df[final_columns].style.apply(highlight_filtered_rows, axis=1))
