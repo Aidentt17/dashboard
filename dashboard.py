@@ -221,7 +221,7 @@ if highlight_mode == "Yes":
     highlight_value = st.sidebar.text_input("Value to Match")
 #warning
     if len(df) > 500:
-        st.warning("Warning: The dataset is quite large. Highlighting may cause performance issues. Consider narrowing your filter criteria or the dataset size.")
+        st.warning("Warning: The dataset is quite large, please consider reducing the size of the dataset through thre filters.")
 
     def highlight_filtered_rows(row):
         try:
@@ -288,3 +288,71 @@ else:
             st.dataframe(df[display_columns].style.apply(highlight_filtered_rows, axis=1))
         else:
             st.dataframe(df[display_columns])
+
+
+#        
+# U/I
+# White fixed header
+st.markdown("""
+    <style>
+        .header-white {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background-color: #ffffff;
+            color: #000000;
+            text-align: center;
+            padding: 15px 0;
+            font-size: 20px;
+            font-weight: bold;
+            z-index: 1000;
+            border-bottom: 1px solid #ddd;
+        }
+
+        /* Push content down so it's not hidden behind the header */
+        .main > div {
+            padding-top: 70px;
+        }
+    </style>
+
+    <div class="header-white">
+        My Streamlit App Header
+    </div>
+""", unsafe_allow_html=True)
+
+# Double footer with dark grey and black
+st.markdown("""
+    <style>
+        .footer-darkgrey {
+            position: fixed;
+            left: 0;
+            bottom: 30px; /* Height of the black footer */
+            width: 100%;
+            background-color: #333333;
+            color: #ffffff;
+            text-align: center;
+            padding: 10px 0;
+            font-size: 14px;
+        }
+
+        .footer-black {
+            position: fixed;
+            left: 0;
+            bottom: 0;
+            width: 100%;
+            background-color: #000000;
+            color: #ffffff;
+            text-align: center;
+            padding: 10px 0;
+            font-size: 14px;
+        }
+    </style>
+
+    <div class="footer-darkgrey">
+        Subscribe
+    </div>
+    <div class="footer-black">
+        About
+    </div>
+""", unsafe_allow_html=True)
