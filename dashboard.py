@@ -251,9 +251,10 @@ if highlight_mode == "Yes":
 ############################ Display/ math ############################
 
 info_columns = [
-    "full_name", "First Name", "Family Name", "Club Name", "Competition Name",
+    "Name", "First Name", "Family Name", "Club Name", "Competition Name",
     "Equivalent Competition", "Level", "Gender", "Season", "GP"
 ]
+
 stat_columns = [col for col in df.columns if col not in info_columns]
 final_columns = [col for col in info_columns + stat_columns if col in df.columns]
 
@@ -264,8 +265,10 @@ if highlight_mode == "Yes":
 else:
     st.dataframe(df[final_columns])
 
-#        
-# U/I
+########################################        
+# extra U/I
+########################################
+
 # White fixed header
 st.markdown("""
     <style>
