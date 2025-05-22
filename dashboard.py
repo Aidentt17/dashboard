@@ -263,6 +263,7 @@ if highlight_mode == "Yes":
         return [''] * len(row)
 
 ############################ Display/ math ############################
+############################ Display/ math ############################
 
 info_columns = [
     "First Name", "Family Name", "Club Name", "Competition Name",
@@ -290,12 +291,12 @@ st.write(f"### Displaying: {readable_name}")
 # Identify numeric columns for formatting
 numeric_cols = df[final_columns].select_dtypes(include='number').columns
 
-# Custom format: 2 decimal points unless whole number
+# Custom format: 1 decimal point unless whole number
 def smart_format(x):
     if pd.isna(x):
         return ""
     elif isinstance(x, (int, float)):
-        return f"{x:.0f}" if float(x).is_integer() else f"{x:.2f}"
+        return f"{x:.0f}" if float(x).is_integer() else f"{x:.1f}"
     return x
 
 format_dict = {col: smart_format for col in numeric_cols}
