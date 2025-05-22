@@ -263,7 +263,6 @@ if highlight_mode == "Yes":
         return [''] * len(row)
 
 ############################ Display/ math ############################
-############################ Display/ math ############################
 
 info_columns = [
     "First Name", "Family Name", "Club Name", "Competition Name",
