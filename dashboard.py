@@ -265,20 +265,55 @@ if highlight_mode == "Yes":
 ############################ Display/ math ############################
 
 info_columns = [
-    "Name", "First Name", "Family Name", "Club Name", "Competition Name",
-    "Equivalent Competition", "Level", "Gender", "Season", "GP"
+    "First Name", "Family Name", "Club Name", "Competition Name",
+    "Equivalent Competition", "Level", "Gender", "Season", "GP", "full_name"
 ]
 
-stat_columns = [col for col in df.columns if col not in info_columns]
-final_columns = [col for col in info_columns + stat_columns if col in df.columns]
+# Columns to show (exclude 'full_name')
+display_info_columns = [col for col in info_columns if col != "full_name"]
+
+# Define stat columns (exclude full_name too, just in case it's not info)
+stat_columns = [
+    col for col in df.columns 
+    if col not in info_columns and col != "full_name"
+]
+
+# Final displayed columns
+final_columns = [
+    col for col in display_info_columns + stat_columns 
+    if col in df.columns
+]
 
 readable_name = dataset_name_map.get(selected_dataset, selected_dataset)
 st.write(f"### Displaying: {readable_name}")
 
+# Identify numeric columns for formatting
+numeric_cols = df[final_columns].select_dtypes(include='number').columns
+
+# Custom format: 2 decimal points unless whole number
+def smart_format(x):
+    if pd.isna(x):
+        return ""
+    elif isinstance(x, (int, float)):
+        return f"{x:.0f}" if float(x).is_integer() else f"{x:.2f}"
+    return x
+
+format_dict = {col: smart_format for col in numeric_cols}
+
 if highlight_mode == "Yes":
-    st.dataframe(df[final_columns].style.apply(highlight_filtered_rows, axis=1))
+    st.dataframe(
+        df[final_columns]
+        .style
+        .format(format_dict)
+        .apply(highlight_filtered_rows, axis=1)
+    )
 else:
-    st.dataframe(df[final_columns])
+    st.dataframe(
+        df[final_columns]
+        .style
+        .format(format_dict)
+    )
+
 
 ########################################        
 # extra U/I
