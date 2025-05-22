@@ -136,13 +136,13 @@ available_datasets = [
     "dftotalscareer.csv"
 ]
 dataset_name_map = {
-    "df.csv": "Raw Data",
+    "df.csv": "Total Season by Season",
     "dfavgcareer.csv": "Average Career Stats",
     "dfavgsbs.csv": "Average Season by Season Stats",
-    "dfscaledavgcareer.csv": "Scaled Avg Career Stats",
-    "dfscaledavgsbs.csv": "Scaled Avg Season by season Stats",
-    "dfscaledthirtyavgcareer.csv": "Scaled 30-Game Avg Career Stats",
-    "dfscaledthirtyavgsbs.csv": "Scaled 30-Game Avg Season by Season Stats",
+    "dfscaledavgcareer.csv": "Adjusted 40-Minutes Avg Career Stats",
+    "dfscaledavgsbs.csv": "Adjusted 40-Minutes Avg Season by season Stats",
+    "dfscaledthirtyavgcareer.csv": "Adjusted 30-Minutes Avg Career Stats",
+    "dfscaledthirtyavgsbs.csv": "Adjusted 30-Minutes Avg Season by Season Stats",
     "dftotalscareer.csv": "Total Career Stats"
 }
 
