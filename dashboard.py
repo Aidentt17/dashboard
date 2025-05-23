@@ -32,16 +32,11 @@ st.markdown("""
     """, unsafe_allow_html=True)    
 
 ###############################Header labels########################
-
-header_meanings = {
-    "FIBA ID Number": "International Basketball Federation Number",
-    "First Name": "Player's first name",
-    "Family Name": "Player's last name",
+# Career-specific legend columns
+career_header_meanings = {
     "Gender": "Player's gender",
-    "Club Name": "Name of basketball club",
-    "Competition Name": "Name of competition",
-    "Season": "Basketball season year",
     "GP": "Games played",
+    "Name": "Player's name",
     "MIN": "Minutes played",
     "PTS": "Points scored",
     "DR": "Defensive rebounds",
@@ -56,43 +51,56 @@ header_meanings = {
     "TO": "Turnovers",
     "FGM": "Field goals made",
     "FGA": "Field goal attempted",
+    "FG%": "Field goal percentage",
     "2PM": "Two-point goals made",
     "2PA": "Two-point goal attempted",
+    "2P%": "Two-point goal percentage",
     "3PM": "Three-point goals made",
     "3PA": "Three-point goal attempted",
+    "3P%": "Three-point goal percentage",
     "FTM": "Free throws made",
-    "FTA": "Free throws attempted"
+    "FTA": "Free throws attempted",
+    "FT%": "Free throw percentage"
+}
+
+# Season-specific legend columns
+season_header_meanings = {
+    "Club Name": "Name of basketball club",
+    "Competition Name": "Name of competition during that specific season",
+    "Equivalent Competition": "Name of equivalent competitions (competitions have had various names between seasons)",
+    "Level": "Competition level",
+    "Gender": "Player's gender",
+    "Season": "Basketball season year",
+    "GP": "Games played (in season)",
+    "Name": "Player's name",
+    "Factor": "Factor applied to average",
+    "MIN": "Minutes played",
+    "PTS": "Points scored",
+    "DR": "Defensive rebounds",
+    "OR": "Offensive rebounds",
+    "REB": "Rebounds",
+    "AST": "Assists",
+    "STL": "Steals",
+    "BLK": "Blocks",
+    "BLKON": "Blocks received",
+    "FOUL": "Fouls committed",
+    "FOULON": "Fouls received",
+    "TO": "Turnovers",
+    "FGM": "Field goals made",
+    "FGA": "Field goal attempted",
+    "FG%": "Field goal percentage",
+    "2PM": "Two-point goals made",
+    "2PA": "Two-point goal attempted",
+    "2P%": "Two-point goal percentage",
+    "3PM": "Three-point goals made",
+    "3PA": "Three-point goal attempted",
+    "3P%": "Three-point goal percentage",
+    "FTM": "Free throws made",
+    "FTA": "Free throws attempted",
+    "FT%": "Free throw percentage"
 }
 
 ############################# pop up legend ##############################
-def show_legend_popup():
-    with st.modal("Column Definitions Legend"):
-        st.subheader("Basketball Statistics Column Definitions")
-        
-        # Create a scrollable container for the definitions
-        legend_container = st.container()
-        with legend_container:
-            # Use columns to create a nicer layout
-            col1, col2 = st.columns(2)
-            
-            # Split definitions between columns for better readability
-            cols = list(df.columns)
-            half = len(cols) // 2
-            
-            for i, col in enumerate(cols):
-                # Determine which column to place this definition
-                display_col = col1 if i < half else col2
-                
-                with display_col:
-                    if col in header_meanings:
-                        st.markdown(f"**{col}**: {header_meanings[col]}")
-                    else:
-                        st.markdown(f"**{col}**: No definition available")
-        
-        # Add a button to close the modal
-        st.button("Close", key="close_legend")
-
-
 # Initialize session state for legend visibility if it doesn't exist
 if 'show_legend' not in st.session_state:
     st.session_state.show_legend = False
@@ -104,19 +112,6 @@ def toggle_legend():
 # Toggle button for showing/hiding the legend with consistent text
 button_text = "✗ Hide Scrollable Column Legend" if st.session_state.show_legend else "✓ Show Scrollable Column Legend"
 st.button(button_text, on_click=toggle_legend)
-
-# Show legend if state is True
-if st.session_state.show_legend:
-    # Create scrollable legend for main area with hardcoded entries
-    legend_html = """
-    <div style="height:300px; overflow-y:scroll; padding:10px; border:1px solid #e6e6e6; border-radius:5px; background-color:#f8f9fa;">
-    """
-    # Use the hardcoded dictionary directly without referencing df.columns
-    for header, meaning in header_meanings.items():
-        legend_html += f"<p><strong>{header}</strong>: {meaning}</p>"
-    legend_html += "</div>"
-    st.markdown(legend_html, unsafe_allow_html=True)
-
 
 
 ##################################################################
@@ -148,9 +143,13 @@ dataset_type = st.sidebar.selectbox("Choose Dataset Type", ["Career", "Seasons"]
 if dataset_type == "Career":
     selected_readable_name = st.sidebar.radio("Choose Career Dataset", list(career_datasets.keys()))
     selected_dataset = career_datasets[selected_readable_name]
+    current_header_meanings = career_header_meanings
+    legend_title = "Career Statistics Column Definitions"
 else:  # Seasons
     selected_readable_name = st.sidebar.radio("Choose Seasons Dataset", list(seasons_datasets.keys()))
     selected_dataset = seasons_datasets[selected_readable_name]
+    current_header_meanings = season_header_meanings
+    legend_title = "Season Statistics Column Definitions"
 
 try:
     df = pd.read_csv(selected_dataset)
@@ -158,6 +157,20 @@ try:
 except Exception as e:
     st.error(f"Failed to load dataset: {e}")
     st.stop()
+
+############################# pop up legend ##############################
+# Show legend if state is True
+if st.session_state.show_legend:
+    # Create scrollable legend for main area with dynamic entries based on dataset type
+    legend_html = f"""
+    <div style="height:300px; overflow-y:scroll; padding:10px; border:1px solid #e6e6e6; border-radius:5px; background-color:#f8f9fa;">
+    <h4>{legend_title}</h4>
+    """
+    # Use the appropriate dictionary based on dataset type
+    for header, meaning in current_header_meanings.items():
+        legend_html += f"<p><strong>{header}</strong>: {meaning}</p>"
+    legend_html += "</div>"
+    st.markdown(legend_html, unsafe_allow_html=True)
 
 
 ############################ Filters ############################
