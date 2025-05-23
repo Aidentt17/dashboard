@@ -125,32 +125,32 @@ if st.session_state.show_legend:
 
 ################# Load dataset #################
 
-available_datasets = [
-    "df.csv",
-    "dfavgcareer.csv",
-    "dfavgsbs.csv",
-    "dfscaledavgcareer.csv",
-    "dfscaledavgsbs.csv",
-    "dfscaledthirtyavgcareer.csv",
-    "dfscaledthirtyavgsbs.csv",
-    "dftotalscareer.csv"
-]
-dataset_name_map = {
-    "df.csv": "Total Season by Season",
-    "dfavgcareer.csv": "Average Career Stats",
-    "dfavgsbs.csv": "Average Season by Season Stats",
-    "dfscaledavgcareer.csv": "Adjusted 40-Minutes Avg Career Stats",
-    "dfscaledavgsbs.csv": "Adjusted 40-Minutes Avg Season by season Stats",
-    "dfscaledthirtyavgcareer.csv": "Adjusted 30-Minutes Avg Career Stats",
-    "dfscaledthirtyavgsbs.csv": "Adjusted 30-Minutes Avg Season by Season Stats",
-    "dftotalscareer.csv": "Total Career Stats"
+# Define dataset mappings
+career_datasets = {
+    "Total Career Stats": "dftotalscareer.csv",
+    "Average Career Stats": "dfavgcareer.csv",
+    "Adjusted 40-Minutes Avg Career Stats": "dfscaledavgcareer.csv",
+    "Adjusted 30-Minutes Avg Career Stats": "dfscaledthirtyavgcareer.csv"
+
 }
 
-readable_to_filename = {v: k for k, v in dataset_name_map.items()}
+seasons_datasets = {
+    "Total Season by Season": "df.csv",
+    "Average Season by Season Stats": "dfavgsbs.csv",
+    "Adjusted 40-Minutes Avg Season by Season Stats": "dfscaledavgsbs.csv",
+    "Adjusted 30-Minutes Avg Season by Season Stats": "dfscaledthirtyavgsbs.csv"
+}
 
-readable_names = list(readable_to_filename.keys())
-selected_readable_name = st.sidebar.selectbox("Choose a Dataset", readable_names)
-selected_dataset = readable_to_filename[selected_readable_name]
+# Main dataset type selection
+dataset_type = st.sidebar.selectbox("Choose Dataset Type", ["Career", "Seasons"])
+
+# Based on selection, show appropriate options
+if dataset_type == "Career":
+    selected_readable_name = st.sidebar.radio("Choose Career Dataset", list(career_datasets.keys()))
+    selected_dataset = career_datasets[selected_readable_name]
+else:  # Seasons
+    selected_readable_name = st.sidebar.radio("Choose Seasons Dataset", list(seasons_datasets.keys()))
+    selected_dataset = seasons_datasets[selected_readable_name]
 
 try:
     df = pd.read_csv(selected_dataset)
@@ -284,8 +284,7 @@ final_columns = [
     if col in df.columns
 ]
 
-readable_name = dataset_name_map.get(selected_dataset, selected_dataset)
-st.write(f"### Displaying: {readable_name}")
+st.write(f"### Displaying: {selected_readable_name}")
 
 # Identify numeric columns for formatting
 numeric_cols = df[final_columns].select_dtypes(include='number').columns
