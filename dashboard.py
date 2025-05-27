@@ -16,7 +16,6 @@ st.set_page_config(
 
 
 # Change font theme to Manrope, Sans-Serif
-
 st.markdown("""
     <style> 
         html, body, [class*="st-"] {font-family: 'Manrope', sans-serif !important; font-weight: 400;}
@@ -155,12 +154,12 @@ dataset_type = st.sidebar.selectbox("Select Display Option", ["Career", "Seasons
 
 # Based on selection, show appropriate options
 if dataset_type == "Career":
-    selected_readable_name = st.sidebar.radio("Select metric option", list(career_datasets.keys()))
+    selected_readable_name = st.sidebar.radio("Select Metric Option", list(career_datasets.keys()))
     selected_dataset = career_datasets[selected_readable_name]
     current_header_meanings = career_header_meanings
     legend_title = "Career Statistics Column Definitions"
 else:  # Seasons
-    selected_readable_name = st.sidebar.radio("Select metric", list(seasons_datasets.keys()))
+    selected_readable_name = st.sidebar.radio("Select Metric Option", list(seasons_datasets.keys()))
     selected_dataset = seasons_datasets[selected_readable_name]
     current_header_meanings = season_header_meanings
     legend_title = "Season Statistics Column Definitions"
@@ -320,7 +319,6 @@ if st.session_state.reset:
 ############################ Display/ math ############################
 # Remove the row index and keep the result in df
 df = df.reset_index(drop=True)
-st.dataframe(df, width=1000, height=400)
 
 
 info_columns = [
@@ -337,15 +335,10 @@ stat_columns = [
     if col not in info_columns and col != "full_name"
 ]
 
-# Hide specific columns for seasons datasets
-columns_to_hide = []
-if dataset_type == "Seasons":
-    columns_to_hide = ["Level", "Factor"]
-
-# Final displayed columns (exclude hidden columns)
+# Final displayed columns
 final_columns = [
     col for col in display_info_columns + stat_columns 
-    if col in df.columns and col not in columns_to_hide
+    if col in df.columns
 ]
 
 st.write(f"### Displaying: {selected_readable_name}")
@@ -363,15 +356,13 @@ def smart_format(x):
 
 format_dict = {col: smart_format for col in numeric_cols}
 
-styled_df_html = (
+#Display the dataframe without conditional highlighting
+st.dataframe(
     df[final_columns]
     .style
-    .format(format_dict)
-    .hide(axis="index")  # Hides the left index
-    .to_html()
+    .format(format_dict),
+    hide_index=True
 )
-
-st.markdown(styled_df_html, unsafe_allow_html=True)
 
 
 
