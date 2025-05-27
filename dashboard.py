@@ -415,3 +415,12 @@ st.markdown("""
         About
     </div>
 """, unsafe_allow_html=True)
+
+#streamlit css
+st.markdown("""
+<style>
+[data-testid="stElementToolbar"] {
+    display: none;
+}
+</style>
+""", unsafe_allow_html=True)
