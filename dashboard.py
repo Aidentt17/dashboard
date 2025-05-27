@@ -214,42 +214,59 @@ if search_term:
 
 # Club filter
 if "Club Name" in df.columns:
-    club_options = df["Club Name"].dropna().unique()
+    club_options = sorted(df["Club Name"].dropna().unique())
     clubs = st.sidebar.multiselect("Select Club Name(s)", club_options, key="clubs")
     if clubs:
         df = df[df["Club Name"].isin(clubs)]
 
 # Gender filter
 if "Gender" in df.columns:
-    gender_options = df["Gender"].dropna().unique()
+    gender_options = sorted(df["Gender"].dropna().unique())
     genders = st.sidebar.multiselect("Select Gender(s)", gender_options, key="genders")
     if genders:
         df = df[df["Gender"].isin(genders)]
-
-# Season filter
+#SEASON FILTER ERROR HANDLING WITH SMIN AND MAX BEING THE SAME
 if "Season" in df.columns and df["Season"].dtype in ['int64', 'float64']:
     min_season, max_season = int(df["Season"].min()), int(df["Season"].max())
-    season_range = st.sidebar.slider("Select Season Range", min_season, max_season,
-                                     (min_season, max_season), key="season_range")
-    df = df[(df["Season"] >= season_range[0]) & (df["Season"] <= season_range[1])]
+
+    # If min and max are equal, bump max by 1 to avoid Streamlit error
+    if min_season == max_season:
+        max_season = min_season + 1
+
+    season_range = st.sidebar.slider(
+        "Select Season Range",
+        min_value=min_season,
+        max_value=max_season,
+        value=(min_season, max_season if max_season != min_season else min_season),
+        key="season_range"
+    )
+
+    # Clamp filter to actual min_season and max_season
+    # If user picks the fake max_season (min_season + 1), treat it as min_season
+    start_season = season_range[0]
+    end_season = season_range[1]
+    if end_season > df["Season"].max():
+        end_season = start_season
+
+    df = df[(df["Season"] >= start_season) & (df["Season"] <= end_season)]
 
 # Level filter
 if "Level" in df.columns:
-    level_options = df["Level"].dropna().unique()
+    level_options = sorted(df["Level"].dropna().unique())
     levels = st.sidebar.multiselect("Select Level(s)", level_options, key="levels")
     if levels:
         df = df[df["Level"].isin(levels)]
 
 # Equivalent Competition
 if "Equivalent Competition" in df.columns:
-    eq_options = df["Equivalent Competition"].dropna().unique()
+    eq_options = sorted(df["Equivalent Competition"].dropna().unique())
     eq_comps = st.sidebar.multiselect("Select Equivalent Competition(s)", eq_options, key="eq_comps")
     if eq_comps:
         df = df[df["Equivalent Competition"].isin(eq_comps)]
 
 # Competition Name
 if "Competition Name" in df.columns:
-    comp_options = df["Competition Name"].dropna().unique()
+    comp_options = sorted(df["Competition Name"].dropna().unique())
     comps = st.sidebar.multiselect("Select Competition Name(s)", comp_options, key="comps")
     if comps:
         df = df[df["Competition Name"].isin(comps)]
@@ -290,6 +307,9 @@ if st.session_state.reset:
 #        return [''] * len(row)
 
 ############################ Display/ math ############################
+# Remove the row index and keep the result in df
+df = df.reset_index(drop=True)
+
 
 info_columns = [
     "Name","First Name", "Family Name", "Club Name", "Competition Name",
@@ -326,6 +346,14 @@ def smart_format(x):
 
 format_dict = {col: smart_format for col in numeric_cols}
 
+#Display the dataframe without conditional highlighting
+st.dataframe(
+    df[final_columns]
+    .style
+    .format(format_dict)
+)
+
+
 #if highlight_mode == "Yes":
 #    st.dataframe(
 #        df[final_columns]
@@ -339,12 +367,8 @@ format_dict = {col: smart_format for col in numeric_cols}
 #        .style
 #        .format(format_dict)
 #    )
-# Display the dataframe without conditional highlighting
-st.dataframe(
-    df[final_columns]
-    .style
-    .format(format_dict)
-)
+
+
 
 
 ########################################        
