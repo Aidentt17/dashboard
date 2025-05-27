@@ -23,6 +23,17 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
+# Simple fix for dataframe menu icons
+st.markdown("""
+    <style>
+        @import url('https://fonts.googleapis.com/icon?family=Material+Icons');
+        [data-testid="stIconMaterial"] {
+            font-family: 'Material Icons' !important;
+            font-feature-settings: 'liga' !important;
+        }
+    </style>
+""", unsafe_allow_html=True)
+
 #############title####################
 
 # Header
