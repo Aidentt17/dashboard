@@ -27,7 +27,7 @@ st.markdown("""
 # Header
 st.markdown("""
     <h1 style='text-align: center; font-weight: 600;'>
-        Basketball Victoria Leagues-Statistics
+        Basketball Victoria Leagues - Statistics
     </h1>
     """, unsafe_allow_html=True)    
 
@@ -136,6 +136,8 @@ seasons_datasets = {
     "Averages (Adjusted to 30 minute games)": "dfscaledthirtyavgsbs.csv"
 }
 
+st.sidebar.markdown("## Settings")
+
 # Main dataset type selection
 dataset_type = st.sidebar.selectbox("Select Display Option", ["Career", "Seasons"])
 
@@ -174,11 +176,8 @@ if st.session_state.show_legend:
 
 
 ############################ Filters ############################
-
-st.sidebar.markdown("## Settings")
 # UI separator
-st.sidebar.markdown("### **_____________ Filters _____________**")
-
+st.sidebar.markdown("## Filters")
 # reset feature
 if "reset" not in st.session_state:
     st.session_state.reset = False
