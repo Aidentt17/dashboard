@@ -337,10 +337,15 @@ stat_columns = [
     if col not in info_columns and col != "full_name"
 ]
 
-# Final displayed columns
+# Hide specific columns for seasons datasets
+columns_to_hide = []
+if dataset_type == "Seasons":
+    columns_to_hide = ["Level", "Factor"]
+
+# Final displayed columns (exclude hidden columns)
 final_columns = [
     col for col in display_info_columns + stat_columns 
-    if col in df.columns
+    if col in df.columns and col not in columns_to_hide
 ]
 
 st.write(f"### Displaying: {selected_readable_name}")
