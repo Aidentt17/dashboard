@@ -16,6 +16,7 @@ st.set_page_config(
 
 
 # Change font theme to Manrope, Sans-Serif
+
 st.markdown("""
     <style> 
         html, body, [class*="st-"] {font-family: 'Manrope', sans-serif !important; font-weight: 400;}
@@ -308,6 +309,7 @@ if st.session_state.reset:
 ############################ Display/ math ############################
 # Remove the row index and keep the result in df
 df = df.reset_index(drop=True)
+st.dataframe(df, width=1000, height=400)
 
 
 info_columns = [
@@ -345,12 +347,16 @@ def smart_format(x):
 
 format_dict = {col: smart_format for col in numeric_cols}
 
-#Display the dataframe without conditional highlighting
-st.dataframe(
+styled_df_html = (
     df[final_columns]
     .style
     .format(format_dict)
+    .hide(axis="index")  # Hides the left index
+    .to_html()
 )
+
+st.markdown(styled_df_html, unsafe_allow_html=True)
+
 
 
 #if highlight_mode == "Yes":
