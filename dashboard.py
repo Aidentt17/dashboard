@@ -360,7 +360,8 @@ format_dict = {col: smart_format for col in numeric_cols}
 st.dataframe(
     df[final_columns]
     .style
-    .format(format_dict)
+    .format(format_dict),
+    hide_index=True
 )
 
 
