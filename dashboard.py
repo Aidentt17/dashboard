@@ -27,7 +27,7 @@ st.markdown("""
 # Header
 st.markdown("""
     <h1 style='text-align: center; font-weight: 600;'>
-        Basketball Victoria Statistic Display
+        Basketball Victoria Leagues-Statistics
     </h1>
     """, unsafe_allow_html=True)    
 
@@ -110,7 +110,7 @@ def toggle_legend():
     st.session_state.show_legend = not st.session_state.show_legend
 
 # Toggle button for showing/hiding the legend with consistent text
-button_text = "✗ Hide Scrollable Column Legend" if st.session_state.show_legend else "✓ Show Scrollable Column Legend"
+button_text = "✗ Hide Legend" if st.session_state.show_legend else "✓ Show Legend"
 st.button(button_text, on_click=toggle_legend)
 
 
@@ -137,7 +137,7 @@ seasons_datasets = {
 }
 
 # Main dataset type selection
-dataset_type = st.sidebar.selectbox("Choose Dataset Type", ["Career", "Seasons"])
+dataset_type = st.sidebar.selectbox("Select data display option", ["Career", "Seasons"])
 
 # Based on selection, show appropriate options
 if dataset_type == "Career":
@@ -174,9 +174,9 @@ if st.session_state.show_legend:
 
 
 ############################ Filters ############################
-
+st.sidebar.markdown("## Settings")
 # UI separator
-st.sidebar.markdown("### **_________ Filter Options ___________**")
+st.sidebar.markdown("### **_________ Filters ___________**")
 
 # Standardize to full_name column for filtering and display
 if "full_name" not in df.columns:
