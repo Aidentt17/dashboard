@@ -445,5 +445,17 @@ st.markdown("""
 [data-testid="stElementToolbar"] {
     display: none;
 }
+[data-testid="stDataFrameResizeHandle"] {
+    display: none;
+}
+div[data-testid="stDataFrame"] > div > div > div > div:last-child {
+    display: none;
+}
+/* More specific targeting for download button */
+[data-testid="stDataFrameDownloadButton"] {
+    display: none !important;
+}
 </style>
 """, unsafe_allow_html=True)
+
+
