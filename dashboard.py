@@ -174,10 +174,22 @@ if st.session_state.show_legend:
 
 
 ############################ Filters ############################
+
 st.sidebar.markdown("## Settings")
 # UI separator
 st.sidebar.markdown("### **_________ Filters ___________**")
 
+# reset feature
+if "reset" not in st.session_state:
+    st.session_state.reset = False
+#button
+if st.sidebar.button("Reset Filters"):
+    st.session_state.reset = True
+    # Clear all session state keys related to filters
+    for key in ["search_term", "clubs", "genders", "season_range", "levels", "eq_comps", "comps"]:
+        if key in st.session_state:
+            del st.session_state[key]
+    st.rerun()
 # Standardize to full_name column for filtering and display
 if "full_name" not in df.columns:
     if "Name" in df.columns:
@@ -189,10 +201,10 @@ if "full_name" not in df.columns:
         )
     else:
         st.warning("No suitable player name columns found in this dataset.")
-        df["full_name"] = ""  # fallback to prevent errors
+        df["full_name"] = ""  # fallback
 
 # Player search
-search_term = st.sidebar.text_input("Search Player Name")
+search_term = st.sidebar.text_input("Search Player Name", key="search_term")
 if search_term:
     matches = df["full_name"].astype(str).str.contains(search_term.strip(), case=False, na=False)
     if matches.any():
@@ -200,49 +212,52 @@ if search_term:
     else:
         st.warning(f"No matches found for: '{search_term}'")
 
-
-# Only apply search if a valid name column exists
-if search_term:
-    if "full_name" in df.columns:
-        df = df[df["full_name"].astype(str).str.contains(search_term, case=False, na=False)]
-    else:
-        st.warning("No 'full_name' column found. Player name search is not available for this dataset.")
-
 # Club filter
 if "Club Name" in df.columns:
-    clubs = st.sidebar.multiselect("Select Club Name(s)", df["Club Name"].dropna().unique())
+    club_options = df["Club Name"].dropna().unique()
+    clubs = st.sidebar.multiselect("Select Club Name(s)", club_options, key="clubs")
     if clubs:
         df = df[df["Club Name"].isin(clubs)]
 
 # Gender filter
 if "Gender" in df.columns:
-    genders = st.sidebar.multiselect("Select Gender(s)", df["Gender"].dropna().unique())
+    gender_options = df["Gender"].dropna().unique()
+    genders = st.sidebar.multiselect("Select Gender(s)", gender_options, key="genders")
     if genders:
         df = df[df["Gender"].isin(genders)]
 
 # Season filter
 if "Season" in df.columns and df["Season"].dtype in ['int64', 'float64']:
     min_season, max_season = int(df["Season"].min()), int(df["Season"].max())
-    season_range = st.sidebar.slider("Select Season Range", min_season, max_season, (min_season, max_season))
+    season_range = st.sidebar.slider("Select Season Range", min_season, max_season,
+                                     (min_season, max_season), key="season_range")
     df = df[(df["Season"] >= season_range[0]) & (df["Season"] <= season_range[1])]
 
 # Level filter
 if "Level" in df.columns:
-    levels = st.sidebar.multiselect("Select Level(s)", df["Level"].dropna().unique())
+    level_options = df["Level"].dropna().unique()
+    levels = st.sidebar.multiselect("Select Level(s)", level_options, key="levels")
     if levels:
         df = df[df["Level"].isin(levels)]
 
 # Equivalent Competition
 if "Equivalent Competition" in df.columns:
-    eq_comps = st.sidebar.multiselect("Select Equivalent Competition(s)", df["Equivalent Competition"].dropna().unique())
+    eq_options = df["Equivalent Competition"].dropna().unique()
+    eq_comps = st.sidebar.multiselect("Select Equivalent Competition(s)", eq_options, key="eq_comps")
     if eq_comps:
         df = df[df["Equivalent Competition"].isin(eq_comps)]
 
 # Competition Name
 if "Competition Name" in df.columns:
-    comps = st.sidebar.multiselect("Select Competition Name(s)", df["Competition Name"].dropna().unique())
+    comp_options = df["Competition Name"].dropna().unique()
+    comps = st.sidebar.multiselect("Select Competition Name(s)", comp_options, key="comps")
     if comps:
         df = df[df["Competition Name"].isin(comps)]
+
+#reset end
+if st.session_state.reset:
+    st.session_state.reset = False
+
 
 ############################ Highlighting ############################
 #
