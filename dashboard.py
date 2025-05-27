@@ -122,31 +122,31 @@ st.button(button_text, on_click=toggle_legend)
 
 # Define dataset mappings
 career_datasets = {
-    "Total Career Stats": "dftotalscareer.csv",
-    "Average Career Stats": "dfavgcareer.csv",
-    "Adjusted 40-Minutes Avg Career Stats": "dfscaledavgcareer.csv",
-    "Adjusted 30-Minutes Avg Career Stats": "dfscaledthirtyavgcareer.csv"
+    "Totals": "dftotalscareer.csv",
+    "Averages": "dfavgcareer.csv",
+    "Averages (Adjusted to 40 minute games)": "dfscaledavgcareer.csv",
+    "Averages (Adjusted to 30 minute games)": "dfscaledthirtyavgcareer.csv"
 
 }
 
 seasons_datasets = {
-    "Total Season by Season": "df.csv",
-    "Average Season by Season Stats": "dfavgsbs.csv",
-    "Adjusted 40-Minutes Avg Season by Season Stats": "dfscaledavgsbs.csv",
-    "Adjusted 30-Minutes Avg Season by Season Stats": "dfscaledthirtyavgsbs.csv"
+    "Totals": "df.csv",
+    "Averages": "dfavgsbs.csv",
+    "Averages (Adjusted to 40 minute games)": "dfscaledavgsbs.csv",
+    "Averages (Adjusted to 30 minute games)": "dfscaledthirtyavgsbs.csv"
 }
 
 # Main dataset type selection
-dataset_type = st.sidebar.selectbox("Select data display option", ["Career", "Seasons"])
+dataset_type = st.sidebar.selectbox("Select Display Option", ["Career", "Seasons"])
 
 # Based on selection, show appropriate options
 if dataset_type == "Career":
-    selected_readable_name = st.sidebar.radio("Choose Career Dataset", list(career_datasets.keys()))
+    selected_readable_name = st.sidebar.radio("Select metric option", list(career_datasets.keys()))
     selected_dataset = career_datasets[selected_readable_name]
     current_header_meanings = career_header_meanings
     legend_title = "Career Statistics Column Definitions"
 else:  # Seasons
-    selected_readable_name = st.sidebar.radio("Choose Seasons Dataset", list(seasons_datasets.keys()))
+    selected_readable_name = st.sidebar.radio("Select metric", list(seasons_datasets.keys()))
     selected_dataset = seasons_datasets[selected_readable_name]
     current_header_meanings = season_header_meanings
     legend_title = "Season Statistics Column Definitions"
@@ -245,40 +245,39 @@ if "Competition Name" in df.columns:
         df = df[df["Competition Name"].isin(comps)]
 
 ############################ Highlighting ############################
-
-st.sidebar.markdown("### **________ Highlight Options _________**")
-
-highlight_mode = st.sidebar.radio("Highlight Specific Rows?", ["No", "Yes"])
-
-highlight_column = None
-highlight_type = None
-highlight_value = None
-
-if highlight_mode == "Yes":
-    highlight_column = st.sidebar.selectbox("Highlight by Column", df.columns)
-    highlight_type = st.sidebar.radio("Condition", ["Equals", "Greater Than", "Less Than"])
-    highlight_value = st.sidebar.text_input("Value to Match")
+#
+#st.sidebar.markdown("### **________ Highlight Options _________**")
+#
+#highlight_mode = st.sidebar.radio("Highlight Specific Rows?", ["No", "Yes"])
+#
+#highlight_column = None
+#highlight_type = None
+#highlight_value = None
+#
+#if highlight_mode == "Yes":
+#    highlight_column = st.sidebar.selectbox("Highlight by Column", df.columns)
+#    highlight_type = st.sidebar.radio("Condition", ["Equals", "Greater Than", "Less Than"])
+#    highlight_value = st.sidebar.text_input("Value to Match")
 #warning
-    if len(df) > 500:
-        st.warning("Warning: The dataset is quite large, please consider reducing the size of the dataset through thre filters.")
-
-    def highlight_filtered_rows(row):
-        try:
-            cell = row[highlight_column]
-            if highlight_type == "Equals" and str(cell) == highlight_value:
-                return ['background-color: orange'] * len(row)
-            elif highlight_type == "Greater Than" and pd.to_numeric(cell, errors='coerce') > float(highlight_value):
-                return ['background-color: orange'] * len(row)
-            elif highlight_type == "Less Than" and pd.to_numeric(cell, errors='coerce') < float(highlight_value):
-                return ['background-color: orange'] * len(row)
-        except:
-            pass
-        return [''] * len(row)
+#    if len(df) > 500:
+#        st.warning("Warning: The dataset is quite large, please consider reducing the size of the dataset through thre filters.")
+#
+#    def highlight_filtered_rows(row):
+#        try:
+#            cell = row[highlight_column]
+#            if highlight_type == "Equals" and str(cell) == highlight_value:
+#                return ['background-color: orange'] * len(row)
+#            elif highlight_type == "Greater Than" and pd.to_numeric(cell, errors='coerce') > float(highlight_value):
+#            elif highlight_type == "Less Than" and pd.to_numeric(cell, errors='coerce') < float(highlight_value):
+#                return ['background-color: orange'] * len(row)
+#        except:
+#            pass
+#        return [''] * len(row)
 
 ############################ Display/ math ############################
 
 info_columns = [
-    "First Name", "Family Name", "Club Name", "Competition Name",
+    "Name","First Name", "Family Name", "Club Name", "Competition Name",
     "Equivalent Competition", "Level", "Gender", "Season", "GP", "full_name"
 ]
 
@@ -312,19 +311,25 @@ def smart_format(x):
 
 format_dict = {col: smart_format for col in numeric_cols}
 
-if highlight_mode == "Yes":
-    st.dataframe(
-        df[final_columns]
-        .style
-        .format(format_dict)
-        .apply(highlight_filtered_rows, axis=1)
-    )
-else:
-    st.dataframe(
-        df[final_columns]
-        .style
-        .format(format_dict)
-    )
+#if highlight_mode == "Yes":
+#    st.dataframe(
+#        df[final_columns]
+#        .style
+#        .format(format_dict)
+#        .apply(highlight_filtered_rows, axis=1)
+#    )
+#else:
+#    st.dataframe(
+#        df[final_columns]
+#        .style
+#        .format(format_dict)
+#    )
+# Display the dataframe without conditional highlighting
+st.dataframe(
+    df[final_columns]
+    .style
+    .format(format_dict)
+)
 
 
 ########################################        
