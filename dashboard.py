@@ -200,6 +200,11 @@ if st.sidebar.button("Reset Filters"):
         if key in st.session_state:
             del st.session_state[key]
     st.rerun()
+
+# Reset the reset flag
+if st.session_state.get('reset', False):
+    st.session_state.reset = False
+
 # Standardize to full_name column for filtering and display
 if "full_name" not in df.columns:
     if "Name" in df.columns:
@@ -214,7 +219,12 @@ if "full_name" not in df.columns:
         df["full_name"] = ""  # fallback
 
 # Player search
-search_term = st.sidebar.text_input("Search Player Name", key="search_term")
+search_term = st.sidebar.text_input(
+    "Search Player Name", 
+    key="search_term",
+    value="" if st.session_state.get('reset', False) else st.session_state.get('search_term', "")
+)
+
 if search_term:
     matches = df["full_name"].astype(str).str.contains(search_term.strip(), case=False, na=False)
     if matches.any():
