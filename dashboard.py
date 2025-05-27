@@ -442,37 +442,8 @@ st.markdown("""
 #streamlit css
 st.markdown("""
 <style>
-/* Hide all dataframe toolbar elements */
 [data-testid="stElementToolbar"] {
-    display: none !important;
-}
-[data-testid="stDataFrameResizeHandle"] {
-    display: none !important;
-}
-/* Hide the entire toolbar container */
-div[data-testid="stDataFrame"] [data-testid="stElementToolbar"] {
-    display: none !important;
-}
-/* Hide download button specifically */
-[data-testid="stDataFrameDownloadButton"] {
-    display: none !important;
-}
-/* Hide the action buttons container */
-div[data-testid="stDataFrame"] > div > div > div > div:last-child {
-    display: none !important;
-}
-/* More aggressive hiding of toolbar */
-div[data-testid="stDataFrame"] button {
-    display: none !important;
-}
-/* Hide any button with download icon */
-div[data-testid="stDataFrame"] button[title*="Download"] {
-    display: none !important;
-}
-/* Alternative approach - hide the entire toolbar area */
-.stDataFrame [data-testid="stElementToolbar"] {
-    visibility: hidden !important;
-    height: 0 !important;
+    display: none;
 }
 </style>
 """, unsafe_allow_html=True)
