@@ -177,7 +177,7 @@ if st.session_state.show_legend:
 
 st.sidebar.markdown("## Settings")
 # UI separator
-st.sidebar.markdown("### **_________ Filters ___________**")
+st.sidebar.markdown("### **_____________ Filters _____________**")
 
 # reset feature
 if "reset" not in st.session_state:
