@@ -33,6 +33,17 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
+# Hide link icons from headers
+st.markdown("""
+    <style>
+        .stMarkdown h3 a {
+            display: none !important;
+        }
+        .stMarkdown h3:hover a {
+            display: none !important;
+        }
+    </style>
+""", unsafe_allow_html=True)
 #############title####################
 
 # Header
@@ -78,7 +89,7 @@ career_header_meanings = {
 season_header_meanings = {
     "Club Name": "Name of basketball club",
     "Competition Name": "Name of competition during that specific season",
-    "Equivalent Competition": "Name of equivalent competitions (competitions have had various names between seasons)",
+    "Equivalent Competition": "Equivalent competitions have had various names over the years",
     "Level": "Competition level",
     "Gender": "Player's gender",
     "Season": "Basketball season year",
@@ -201,7 +212,7 @@ if st.sidebar.button("Reset Filters"):
             del st.session_state[key]
     st.rerun()
 
-# Reset the reset flag
+# Reset the reset flagf
 if st.session_state.get('reset', False):
     st.session_state.reset = False
 
@@ -351,7 +362,29 @@ final_columns = [
     if col in df.columns
 ]
 
+############################ Column Hiding Logic ############################
+# Define columns to hide based on dataset type and metric option
+columns_to_hide = []
+
+# Hide Level and Factor columns for all Seasons datasets
+if dataset_type == "Seasons":
+    columns_to_hide.extend(["Level", "Factor"])
+
+# Hide Minutes column for "Per 30 minutes played" options
+if "Per 30 minutes played" in selected_readable_name:
+    columns_to_hide.append("MIN")
+
+# Remove hidden columns from final_columns
+final_columns = [col for col in final_columns if col not in columns_to_hide]
+
 st.write(f"### Displaying: {selected_readable_name}")
+
+############################ Dataset Descriptions ############################
+# Add descriptions for specific metric options
+if "Adjusted to 40 minute games" in selected_readable_name:
+    st.write("*Stats from 48 minute games in earlier seasons (where applicable) are adjusted down to 40 minutes worth*")
+elif "Per 30 minutes played" in selected_readable_name:
+    st.write("*Stats adjusted based on everyone playing 30 minutes per game (average starter minutes)*")
 
 # Identify numeric columns for formatting
 numeric_cols = df[final_columns].select_dtypes(include='number').columns
