@@ -205,9 +205,9 @@ if "reset" not in st.session_state:
     st.session_state.reset = False
 #button
 if st.sidebar.button("Reset Filters"):
-    st.session_state.reset = True
-    # Clear all session state keys related to filters
-    for key in ["search_term", "clubs", "genders", "season_range", "levels", "eq_comps", "comps"]:
+    # Clear all filter-related session state
+    keys_to_clear = ["search_term", "clubs", "genders", "season_range", "levels", "eq_comps", "comps"]
+    for key in keys_to_clear:
         if key in st.session_state:
             del st.session_state[key]
     st.rerun()
@@ -231,11 +231,10 @@ if "full_name" not in df.columns:
 
 # Player search
 search_term = st.sidebar.text_input(
-    "Search Player Name", 
+    "Search Player Name",
     key="search_term",
-    value="" if st.session_state.get('reset', False) else st.session_state.get('search_term', "")
+    value=st.session_state.get("search_term", "")
 )
-
 if search_term:
     matches = df["full_name"].astype(str).str.contains(search_term.strip(), case=False, na=False)
     if matches.any():
@@ -246,14 +245,24 @@ if search_term:
 # Club filter
 if "Club Name" in df.columns:
     club_options = sorted(df["Club Name"].dropna().unique())
-    clubs = st.sidebar.multiselect("Select Club Name(s)", club_options, key="clubs")
+    clubs = st.sidebar.multiselect(
+        "Select Club Name(s)", 
+        club_options, 
+        key="clubs",
+        default=st.session_state.get("clubs", [])
+    )
     if clubs:
         df = df[df["Club Name"].isin(clubs)]
 
 # Gender filter
 if "Gender" in df.columns:
     gender_options = sorted(df["Gender"].dropna().unique())
-    genders = st.sidebar.multiselect("Select Gender(s)", gender_options, key="genders")
+    genders = st.sidebar.multiselect(
+        "Select Gender(s)", 
+        gender_options, 
+        key="genders",
+        default=st.session_state.get("genders", [])
+    )
     if genders:
         df = df[df["Gender"].isin(genders)]
 #SEASON FILTER ERROR HANDLING WITH SMIN AND MAX BEING THE SAME
