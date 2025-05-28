@@ -332,8 +332,8 @@ df = df.reset_index(drop=True)
 
 
 info_columns = [
-    "Name","First Name", "Family Name", "Club Name", "Competition Name",
-    "Equivalent Competition", "Level", "Gender", "Season", "GP", "full_name"
+    "Name","First Name", "Family Name", "Gender", "Season", "Club Name", "Competition Name",
+    "Equivalent Competition", "Level", "GP", "full_name"
 ]
 
 # Columns to show (exclude 'full_name')
