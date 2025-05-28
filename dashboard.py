@@ -136,7 +136,7 @@ career_datasets = {
     "Totals": "dftotalscareer.csv",
     "Averages": "dfavgcareer.csv",
     "Averages (Adjusted to 40 minute games)": "dfscaledavgcareer.csv",
-    "Averages (Adjusted to 30 minute games)": "dfscaledthirtyavgcareer.csv"
+    "Averages (Per 30 minutes played)": "dfscaledthirtyavgcareer.csv"
 
 }
 
@@ -144,7 +144,7 @@ seasons_datasets = {
     "Totals": "df.csv",
     "Averages": "dfavgsbs.csv",
     "Averages (Adjusted to 40 minute games)": "dfscaledavgsbs.csv",
-    "Averages (Adjusted to 30 minute games)": "dfscaledthirtyavgsbs.csv"
+    "Averages (Per 30 minutes played)": "dfscaledthirtyavgsbs.csv"
 }
 
 st.sidebar.markdown("## Settings")
