@@ -36,14 +36,15 @@ st.markdown("""
 # Hide link icons from headers
 st.markdown("""
     <style>
-        .stMarkdown h3 a {
-            display: none !important;
-        }
-        .stMarkdown h3:hover a {
+        /* Hide all link icons */
+        .stMarkdown a[href^="#"],
+        .stMarkdown h1 a, .stMarkdown h2 a, .stMarkdown h3 a,
+        .stMarkdown h4 a, .stMarkdown h5 a, .stMarkdown h6 a {
             display: none !important;
         }
     </style>
 """, unsafe_allow_html=True)
+
 #############title####################
 
 # Header
