@@ -409,14 +409,25 @@ def smart_format(x):
 
 format_dict = {col: smart_format for col in numeric_cols}
 
-#Display the dataframe without conditional highlighting
-st.dataframe(
-    df[final_columns]
-    .style
-    .format(format_dict),
-    hide_index=True
-)
-
+#Display the dataframe
+total_cells = len(df) * len(final_columns)
+if total_cells > 262144:  
+    df_display = df[final_columns].copy()
+    for col in numeric_cols:
+        if col in df_display.columns:
+            df_display[col] = df_display[col].apply(smart_format)
+    
+    st.dataframe(
+    df_display, 
+    hide_index=True,
+    use_container_width=True,
+    column_config={
+        "Name": st.column_config.Column("Name", pinned="left")})
+else:
+  st.dataframe(df[final_columns].style.format(format_dict),
+    hide_index=True,
+    use_container_width=True,
+    column_config={"Name": st.column_config.Column("Name", pinned="left")})
 
 
 #if highlight_mode == "Yes":
