@@ -183,6 +183,10 @@ except Exception as e:
     st.error(f"Failed to load dataset: {e}")
     st.stop()
 
+# Converting Season to integer
+if "Season" in df.columns:
+    df["Season"] = df["Season"].astype(int)
+
 ############################# pop up legend ##############################
 # Show legend if state is True
 if st.session_state.show_legend:
@@ -403,17 +407,18 @@ numeric_cols = df[final_columns].select_dtypes(include='number').columns
 is_averaged_dataset = any(keyword in selected_readable_name for keyword in ["Averages", "Per 30 minutes played"])
 
 # Custom format: 1 decimal point for averaged datasets, smart format for totals
-def smart_format(x):
+def smart_format(x, col_name=None):
     if pd.isna(x):
         return ""
     elif isinstance(x, (int, float)):
-        if is_averaged_dataset:
+        # Always show Season as whole number
+        if col_name == "Season":
+            return f"{int(x)}"
+        elif is_averaged_dataset:
             return f"{x:.1f}"  # Always 1 decimal for averaged datasets
         else:
             return f"{x:.0f}" if float(x).is_integer() else f"{x:.1f}"  # Smart format for totals
     return x
-
-format_dict = {col: smart_format for col in numeric_cols}
 
 #Display the dataframe
 total_cells = len(df) * len(final_columns)
@@ -421,7 +426,7 @@ if total_cells > 262144:
     df_display = df[final_columns].copy()
     for col in numeric_cols:
         if col in df_display.columns:
-            df_display[col] = df_display[col].apply(smart_format)
+            df_display[col] = df_display[col].apply(lambda x: smart_format(x, col))
     
     st.dataframe(
         df_display, 
