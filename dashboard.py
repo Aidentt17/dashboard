@@ -399,12 +399,18 @@ elif "Per 30 minutes played" in selected_readable_name:
 # Identify numeric columns for formatting
 numeric_cols = df[final_columns].select_dtypes(include='number').columns
 
-# Custom format: 1 decimal point unless whole number
+# Check if current dataset is an averaged dataset
+is_averaged_dataset = any(keyword in selected_readable_name for keyword in ["Averages", "Per 30 minutes played"])
+
+# Custom format: 1 decimal point for averaged datasets, smart format for totals
 def smart_format(x):
     if pd.isna(x):
         return ""
     elif isinstance(x, (int, float)):
-        return f"{x:.0f}" if float(x).is_integer() else f"{x:.1f}"
+        if is_averaged_dataset:
+            return f"{x:.1f}"  # Always 1 decimal for averaged datasets
+        else:
+            return f"{x:.0f}" if float(x).is_integer() else f"{x:.1f}"  # Smart format for totals
     return x
 
 format_dict = {col: smart_format for col in numeric_cols}
