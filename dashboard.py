@@ -420,37 +420,38 @@ def smart_format(x, col_name=None):
             return f"{x:.0f}" if float(x).is_integer() else f"{x:.1f}"  # Smart format for totals
     return x
 
-#Display the dataframe
-total_cells = len(df) * len(final_columns)
-if total_cells > 262144:  
-    df_display = df[final_columns].copy()
-    for col in numeric_cols:
-        if col in df_display.columns:
-            df_display[col] = df_display[col].apply(lambda x: smart_format(x, col))
-    
-    st.dataframe(
-        df_display, 
-        hide_index=True,
-        use_container_width=True,
-        column_config={
-            "Name": st.column_config.Column("Name", pinned="left")
-        }
-    )
-else:
-    # Apply formatting manually for smaller datasets
-    df_display = df[final_columns].copy()
-    for col in numeric_cols:
-        if col in df_display.columns:
-            df_display[col] = df_display[col].apply(smart_format)
-    
-    st.dataframe(
-        df_display,
-        hide_index=True,
-        use_container_width=True,
-        column_config={
-            "Name": st.column_config.Column("Name", pinned="left")
-        }
-    )
+# Function to convert columns to appropriate numeric types
+def convert_to_numeric(df, columns):
+    """Convert specified columns to numeric, handling errors gracefully"""
+    df_copy = df.copy()
+    for col in columns:
+        if col in df_copy.columns:
+            df_copy[col] = pd.to_numeric(df_copy[col], errors='coerce')
+    return df_copy
+
+# Display the dataframe
+df_for_display = convert_to_numeric(df[final_columns], numeric_cols)
+
+# Configure formatting for numeric columns
+column_config = {}
+for col in numeric_cols:
+    if col in df_for_display.columns:
+        if col == "Season":
+            column_config[col] = st.column_config.NumberColumn(col, format="%d")
+        elif is_averaged_dataset:
+            column_config[col] = st.column_config.NumberColumn(col, format="%.1f")
+        else:
+            column_config[col] = st.column_config.NumberColumn(col, format="%.0f")
+
+# Pin Name column to left
+column_config["Name"] = st.column_config.Column("Name", pinned="left")
+
+st.dataframe(
+    df_for_display,
+    hide_index=True,
+    use_container_width=True,
+    column_config=column_config
+)
 
 
 #if highlight_mode == "Yes":
