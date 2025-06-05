@@ -73,7 +73,7 @@ working with vs(visual studio) code
 FOR NEW DATA: This section is about how to get the excel data into a ready format for our dashboard
 1. Install the Jupyter Notebook extensions by going to the extensions box and typing 'Jupyter'
 ![alt text](image-6.png)
-2. With this we can now use the "dataprep.ipynb" file
+2. With this we can now use the "dataframe building coe.ipynb" file
 - Steps to update data
 - Delete old data
 - Add updated excel document
