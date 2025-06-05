@@ -73,12 +73,23 @@ working with vs(visual studio) code
 FOR NEW DATA: This section is about how to get the excel data into a ready format for our dashboard
 1. Install the Jupyter Notebook extensions by going to the extensions box and typing 'Jupyter'
 ![alt text](image-6.png)
-2. With this we can now use the "dataframe building coe.ipynb" file
+2. With this we can now use the "dataframe building code.ipynb" file
 - Steps to update data
 - Delete old data
 - Add updated excel document
 - Run the dataprep.ipynb file
 - All done and good to run dashboard with updated data
+- **NOTE: After running the data cleaning file, make sure the dataset names remain as custom:
+1. df.csv
+2. dfavgcareer.csv
+3. dfavgsbs.csv
+4. dfscaledavgcareer.csv
+5. dfscaledavgsbs.csv
+6. dfscaledthirtyavgcareer.csv
+7. dfscaledthirtyavgsbs.csv
+8. dftotalscareer.csv
+
+If the datasets don't have the required names, the data won't work!
 
 TO TURN THE DASHBOARD INTO A WEB-LINK:
 - 1,sign into Streamlit Community Cloud (free version) using your GitHub account (press authorise): 
