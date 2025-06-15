@@ -206,20 +206,35 @@ if st.session_state.show_legend:
 # UI separator
 st.sidebar.markdown("## Filters")
 # reset feature
-if "reset" not in st.session_state:
-    st.session_state.reset = False
-#button
-if st.sidebar.button("Reset Filters"):
-    # Clear all filter-related session state
-    keys_to_clear = ["search_term", "clubs", "genders", "season_range", "levels", "eq_comps", "comps"]
+if "reset_counter" not in st.session_state:
+    st.session_state.reset_counter = 0
+
+# Button with unique key that changes on each reset
+if st.sidebar.button("Reset Filters", key=f"reset_btn_{st.session_state.reset_counter}"):
+    # Clear ALL session state except essential ones
+    keys_to_keep = ["reset_counter", "show_legend"]
+    keys_to_clear = [key for key in st.session_state.keys() if key not in keys_to_keep]
+    
     for key in keys_to_clear:
-        if key in st.session_state:
-            del st.session_state[key]
+        del st.session_state[key]
+    
+    # Force reset of all filter components by setting them to empty/default values
+    filter_keys = ["search_term", "clubs", "genders", "season_range", "levels", "eq_comps", "comps"]
+    for key in filter_keys:
+        if key == "search_term":
+            st.session_state[key] = ""
+        elif key == "season_range":
+            # Will be reset when component recreates
+            pass
+        else:
+            st.session_state[key] = []
+    
+    # Increment counter to force component re-creation
+    st.session_state.reset_counter += 1
+    
+    # Force rerun
     st.rerun()
 
-# Reset the reset flagf
-if st.session_state.get('reset', False):
-    st.session_state.reset = False
 
 # Standardize to full_name column for filtering and display
 if "full_name" not in df.columns:
@@ -237,7 +252,7 @@ if "full_name" not in df.columns:
 # Player search
 search_term = st.sidebar.text_input(
     "Search Player Name",
-    key="search_term",
+    key=f"search_term_{st.session_state.reset_counter}",
     value=st.session_state.get("search_term", "")
 )
 if search_term:
@@ -251,11 +266,11 @@ if search_term:
 if "Club Name" in df.columns:
     club_options = sorted(df["Club Name"].dropna().unique())
     clubs = st.sidebar.multiselect(
-        "Select Club Name(s)", 
-        club_options, 
-        key="clubs",
-        default=st.session_state.get("clubs", [])
-    )
+    "Select Club Name(s)", 
+    club_options, 
+    key=f"clubs_{st.session_state.reset_counter}",
+    default=st.session_state.get("clubs", [])
+)
     if clubs:
         df = df[df["Club Name"].isin(clubs)]
 
@@ -263,11 +278,11 @@ if "Club Name" in df.columns:
 if "Gender" in df.columns:
     gender_options = sorted(df["Gender"].dropna().unique())
     genders = st.sidebar.multiselect(
-        "Select Gender(s)", 
-        gender_options, 
-        key="genders",
-        default=st.session_state.get("genders", [])
-    )
+    "Select Gender(s)", 
+    gender_options, 
+    key=f"genders_{st.session_state.reset_counter}",
+    default=st.session_state.get("genders", [])
+)
     if genders:
         df = df[df["Gender"].isin(genders)]
 #SEASON FILTER ERROR HANDLING WITH SMIN AND MAX BEING THE SAME
@@ -279,12 +294,12 @@ if "Season" in df.columns and df["Season"].dtype in ['int64', 'float64']:
         max_season = min_season + 1
 
     season_range = st.sidebar.slider(
-        "Select Season Range",
-        min_value=min_season,
-        max_value=max_season,
-        value=(min_season, max_season if max_season != min_season else min_season),
-        key="season_range"
-    )
+    "Select Season Range",
+    min_value=min_season,
+    max_value=max_season,
+    value=(min_season, max_season if max_season != min_season else min_season),
+    key=f"season_range_{st.session_state.reset_counter}"
+)
 
     # Clamp filter to actual min_season and max_season
     # If user picks the fake max_season (min_season + 1), treat it as min_season
@@ -298,27 +313,39 @@ if "Season" in df.columns and df["Season"].dtype in ['int64', 'float64']:
 # Level filter
 if "Level" in df.columns:
     level_options = sorted(df["Level"].dropna().unique())
-    levels = st.sidebar.multiselect("Select Level(s)", level_options, key="levels")
+    levels = st.sidebar.multiselect(
+    "Select Level(s)", 
+    level_options, 
+    key=f"levels_{st.session_state.reset_counter}",
+    default=st.session_state.get("levels", [])
+)
     if levels:
         df = df[df["Level"].isin(levels)]
 
 # Equivalent Competition
 if "Equivalent Competition" in df.columns:
     eq_options = sorted(df["Equivalent Competition"].dropna().unique())
-    eq_comps = st.sidebar.multiselect("Select Equivalent Competition(s)", eq_options, key="eq_comps")
+    eq_comps = st.sidebar.multiselect(
+    "Select Equivalent Competition(s)", 
+    eq_options, 
+    key=f"eq_comps_{st.session_state.reset_counter}",
+    default=st.session_state.get("eq_comps", [])
+)
     if eq_comps:
         df = df[df["Equivalent Competition"].isin(eq_comps)]
 
 # Competition Name
 if "Competition Name" in df.columns:
     comp_options = sorted(df["Competition Name"].dropna().unique())
-    comps = st.sidebar.multiselect("Select Competition Name(s)", comp_options, key="comps")
+    comps = st.sidebar.multiselect(
+    "Select Competition Name(s)", 
+    comp_options, 
+    key=f"comps_{st.session_state.reset_counter}",
+    default=st.session_state.get("comps", [])
+)
     if comps:
         df = df[df["Competition Name"].isin(comps)]
 
-#reset end
-if st.session_state.reset:
-    st.session_state.reset = False
 
 
 ############################ Highlighting ############################
